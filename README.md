@@ -43,13 +43,22 @@ This project will contain
 
 | Name | Description |
 |---|---|
-|   |   |
-|   |   |
-|   |   |
-|   |   |
-|   |   |
-|   |   |
-|   |   |
-|   |   |
-|   |   |
-|   |   |
+| ID	Client  | Unique ID of the applicant  |
+| CODE_GENDER  | Gender of the applicant  |
+| FLAG_OWN_CAR  | Does the applicant own a car  |
+| FLAG_OWN_REALTY  | Does the applicant own real-estate |
+| CNT_CHILDREN  | How many children does the applicant have |
+| AMT_INCOME_TOTAL  | Applicant's annual income (Yuan) |
+| NAME_INCOME_TYPE  | The applicant's income category |
+| NAME_EDUCATION_TYPE  | The applicant's level of education attainment |
+| NAME_FAMILY_STATUS  | Martial Status  |
+| NAME_HOUSING_TYPE  |  What is the living situation of the applicant |
+| DAYS_BIRTH  |  Applicant's Birthdate |
+| DAYS_EMPLOYED  |  How many days the applicant has been employed (negative) or unemployed (positive) |
+| FLAG_MOBIL  |  Does the applicant have a mobile phone |
+| FLAG_WORK_PHONE  |  Does the applicant have a work phone number |
+| FLAG_PHONE  |  Does the applicant have a phone |
+| FLAG_EMAIL  |  Does the applicant have an e-mail address|
+| OCCUPATION_TYPE  |  The applicant's occupation  |
+| CNT_FAM_MEMBERS  |  The applicant's household size (spouse and children)|
+| CREDIT_RISK |  The risk level associated with an applicant |  
