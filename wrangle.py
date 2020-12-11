@@ -1,9 +1,10 @@
 import pandas as pd
 import numpy as np
+import math
 
-def get_reports_data(creditreportcsv):
+def get_reports_data(creditrecordcsv):
     '''
-    The fuction takes in the credit report csv and creates a data frame for:
+    The function takes in the credit_record.csv and creates a data frame for:
     * expanded - for each account id find out the number of times each status occured throughout the history of the account
     * score - creates a scoring system and returns the Expanded with the aggergated score and the number of times each status occured by serverity
     * full_history - for each account gives the full account's history starting at the most recent month of account going backwards 
@@ -57,4 +58,90 @@ def get_reports_data(creditreportcsv):
     
     # return expanded, score, and full history data frames
     return expanded, score, full_history    
-    
+
+def pensioner_years_worked(row):
+    '''
+    This function takes in a row of a dataframe and checks if the row belongs to a pensioner that is permanently retired (days_employed = -365243)
+    If the pensioner is male, then the number of years worked is equal to a career from age 17 to their age or age 60, whichever is smaller
+    If the pensioner is female and is blue collar, then the number of years worked is equal to a career from age 17 to their age or age 50, whichever is smaller
+    If the pensioner is female and is not blue collar, then the number of years worked is equal to a career from age 17 to their age or age 55, whichever is smaller
+    The starting age of 17 is based on the minimum legal working age of 16, but considers the common practice of waiting until graduation from secondary school before working in cities
+    '''
+    # Sets the years worked to be equal to the starting value recorded in the employed_years column. If the row is not a retired pensioner, this value will be returned and nothing will be changed
+    years_worked = row['employed_years']
+
+    # Checks if the record is from a permanently retired pensioner
+    if row['days_employed'] == -365243:
+
+        # If the pensioner is male:
+        if row['code_gender'] == 'M':
+
+            # Find the number of years worked assuming they retired at 60, or if they aren't 60 yet, assume they just retired and have worked since they were 17
+            if row['age'] > 60:
+                years_worked = row['age'] - 17 - (row['age'] - 60)
+            else:
+                years_worked = row['age'] - 17
+
+        # If the pensioner is female:
+        elif row['code_gender'] == 'F':
+
+            # Identify if the pensioner is blue collar and eligible for earlier retirement
+            blue_collar = ['Laborers', 'Drivers', 'Cooking staff', 
+                           'Security staff', 'Cleaning staff', 'Low-skill Laborers', 'Waiters/barmen staff']
+
+            # If the pensioner is blue collar, find the number of years worked assuming they retired at 50, or if they aren't 50 yet, assume they just retired and have worked since they were 17
+            if row['occupation_type'] in blue_collar:
+                if row['age'] > 50:
+                    years_worked = row['age'] - 17 - (row['age'] - 50)
+                else:
+                    years_worked = row['age'] - 17
+            
+            # If the pensioner is not blue collar, find the number of years worked assuming they retired at 55, or if they aren't 55 yet, assume they just retired and have worked since they were 17
+            else:
+                if row['age'] > 55:
+                    years_worked = row['age'] - 17 - (row['age'] - 55)
+                else:
+                    years_worked = row['age'] - 17
+
+    return years_worked
+
+def pensioner_days_employed(row):
+    days_employed = row['days_employed']
+    if row['days_employed'] == -365243:
+        days_employed = math.floor(row['employed_years'] * 365.25)
+    return days_employed
+
+def get_application_data(applicationrecordcsv):
+    '''
+    The function takes in the application_record.csv and returns a dataframe after basic cleaning
+    '''
+    apps = pd.read_csv('application_record.csv')
+
+    # Converts all column headers to lowercase
+    apps.columns = (apps.columns).str.lower()
+
+    # Fills null values in occuptation type with 'Other'
+    apps['occupation_type'].fillna('Other', inplace=True)
+
+    # Convert days employed to years employed
+    apps['employed_years'] = [round(val/(-365)) if val < -365 else val/(-365)  if val < 0 else round(val/365) for val in list(apps.days_employed)]
+
+    # Convert days_birth to age in years
+    apps['age'] = (apps['days_birth']/365 * -1).apply(np.floor)
+
+    # Convert "Yes" and "No" throughout dataframe to 1s and 0s respectively
+    apps.replace({'Y': 1, 'N': 0}, inplace=True)
+
+    # Reverses sign on days birth
+    apps['days_birth'] = apps['days_birth'] * -1
+
+    # Reverses sign on days employed
+    apps['days_employed'] = apps['days_employed'] * -1
+
+    # Changes the employed_years value of retired pensioners from 1001 to an estimate based on their current age, gender, and occupation
+    apps['employed_years'] = apps.apply(lambda row: pensioner_years_worked(row), axis = 1)
+
+    # If days employed is a stand in value (-365243), convert that to a number of days equal to the estimated number of years worked
+    apps['days_employed'] = apps.apply(lambda row: pensioner_days_employed(row), axis = 1)
+
+    return apps
