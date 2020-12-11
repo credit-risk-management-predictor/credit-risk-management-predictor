@@ -6,7 +6,7 @@ def get_reports_data(creditrecordcsv):
     '''
     The function takes in the credit_record.csv and creates a data frame for:
     * expanded - for each account id find out the number of times each status occured throughout the history of the account
-    * score - creates a scoring system and returns the Expanded with the aggergated score and the number of times each status occured by serverity
+    * score - creates a scoring system and returns the Expanded DF with the aggergated score, a score for months, and the number of times each status occured by serverity and . The higher the score the more risk
     * full_history - for each account gives the full account's history starting at the most recent month of account going backwards 
     i.e. if an account has been active for 3 months the status of the account will the most recent month's status while 2 months ago will be the first month of the account's existence
     '''
@@ -31,7 +31,7 @@ def get_reports_data(creditrecordcsv):
 
     # copy the expanded dataframe to maintain data intregity (for exploring and future data prepping as needed)
     score = expanded.copy()
-    # multiple each lateness by n where n is cronological order of the lateness i.e. being 30-59days is 2 and '120-149' is 5
+    # multiply each lateness by n where n is the cronological order of the lateness i.e. being 30-59days is 2 and '120-149' is 5
     # for paid off multiple by -2
     score['30-59'] = score['30-59'] * 2
     score['60-89'] = score['60-89'] * 3
@@ -41,10 +41,12 @@ def get_reports_data(creditrecordcsv):
     score['paid_off'] = score['paid_off'] * -2
     # convert the id to string
     score['id'] = score['id'].astype(str)
+    # Creates a score for months active
+    score['time_score'] = np.where(score['months_active'] < 18, 0, np.where(score['months_active'] < 47, -10, -20))
     # sum the values on the row level
     score['score'] = score.sum(axis=1)
  
-    # create a range for the maxium number of months (61) in the data frame
+    # create a range for the maxium number of months (60) in the data frame
     # use a for loop to put get the entire account's history to the current month by shifting status by n
     for n in range(1, 61):
         report.columns = report.columns.str.lower()
