@@ -10,7 +10,7 @@ def get_reports_data(creditrecordcsv):
     * full_history - for each account gives the full account's history starting at the most recent month of account going backwards 
     i.e. if an account has been active for 3 months the status of the account will the most recent month's status while 2 months ago will be the first month of the account's existence
     '''
-    report = pd.read_csv(creditreportcsv)
+    report = pd.read_csv(creditrecordcsv)
     # number of months of active credit account for each ID 
     months = report.groupby('ID').count().reset_index()
     # pull only the columns we care about
@@ -26,7 +26,9 @@ def get_reports_data(creditrecordcsv):
     # rename the columns in a way that makes sense
     expanded.columns = ['id', '0-29', '120-149', '30-59', '60-89', '90-119',
         'bad_debt', 'no_debt', 'paid_off', 'months_active']
-     
+    # Reorders the columns for clarity    
+    expanded = expanded[['id', '0-29', '30-59', '60-89', '90-119', '120-149', 'bad_debt', 'no_debt', 'paid_off', 'months_active']]
+
     # copy the expanded dataframe to maintain data intregity (for exploring and future data prepping as needed)
     score = expanded.copy()
     # multiple each lateness by n where n is cronological order of the lateness i.e. being 30-59days is 2 and '120-149' is 5
@@ -143,5 +145,8 @@ def get_application_data(applicationrecordcsv):
 
     # If days employed is a stand in value (-365243), convert that to a number of days equal to the estimated number of years worked
     apps['days_employed'] = apps.apply(lambda row: pensioner_days_employed(row), axis = 1)
+
+    # Converts id to object type
+    apps['id'] = apps['id'].astype(str)
 
     return apps
