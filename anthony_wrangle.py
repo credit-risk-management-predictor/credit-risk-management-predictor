@@ -216,7 +216,7 @@ def encode_dummies(apps):
     apps_encoded = pd.concat([apps, dummies], axis=1)
     
     # Drop original columns
-    apps_encoded.drop(columns=dummies_list, inplace=True)
+    ##apps_encoded.drop(columns=dummies_list, inplace=True)
     
     # Drop gender, age, and family status
     dropped = ['code_gender', 'name_family_status', 'age']
