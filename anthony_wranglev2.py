@@ -35,7 +35,7 @@ def get_reports_data(creditrecordcsv):
     # find the number of months that existed in the data before the first default
     default['months_before_default'] = abs(default['first_month']) - abs(default['first_deafult_month'])
     # pull out all default ids to drop from the reports DF
-    ids_to_drop = list(default.id.unique())
+    default_ids = list(default.id.unique())
     # reassign the default DF to only those accounts that had 12 or more months of info before a default
     default = default[default['months_before_default'] >= 12]
     # merge the default DF onto the reports DF to get everything into a single DF
@@ -46,24 +46,28 @@ def get_reports_data(creditrecordcsv):
         default_report[(default_report['months_balance'] >= default_report['first_deafult_month'] - 11) 
             & (default_report['months_balance'] <= default_report['first_deafult_month'])]
     )
-    # then drop the columns that aren't needed
+    # then reduce the DF to only contain the first 6 months of that data to have a blind period of 6 months
+    default_data = default_data[default_data['months_balance'] < default_data['first_deafult_month'] - 5]
+    # finally drop the columns that aren't needed
     default_data = default_data[['id', 'months_balance', 'status']]
 
     # create the not_default DF from the reports DF by dropping any id that had a default
-    not_default = report[~report['id'].isin(ids_to_drop)]
+    not_default = report[~report['id'].isin(default_ids)]
     # from the not_default, find the max month and min month an id existed.
     not_default_data = not_default.groupby('id')['months_balance'].agg(['max', 'count']).reset_index()
     # find the number of months total an id was present
     not_default_data = not_default_data[not_default_data['count']>=12]
-    # Pull out the ids_to_keep to drop from the report DF 
-    ids_to_keep = list(not_default_data['id'].unique())
+    # Pull out the not_default_ids to drop from the report DF 
+    not_default_ids = list(not_default_data['id'].unique())
     # drop the ids that don't have at least 12 months of data
-    not_default = not_default[not_default['id'].isin(ids_to_keep)]
+    not_default = not_default[not_default['id'].isin(not_default_ids)]
     # merge the not_default DF with not_default_data to get everything onto one DF
     not_default = not_default.merge(not_default_data, on='id', how='left')
     # reassign not_default to only data only present for the last 12 months of an account's existence 
     not_default = (not_default[(not_default['months_balance']<=not_default['max']) 
                             & (not_default['months_balance']>=not_default['max']-11)])
+    # then reduce the DF to only contain the first 6 months of that data to have a blind period of 6 months
+    not_default = not_default[not_default['months_balance'] < not_default['max'] - 5]
     # drop the columns used for calculations
     not_default= not_default[['id', 'months_balance', 'status']]
 
@@ -78,7 +82,7 @@ def get_reports_data(creditrecordcsv):
     # fill all null values with 0 
     expanded.fillna(0, inplace=True)
     # rename the columns in a way that makes sense
-    expanded.columns = ['id', '0-29', '30-59', '60-89', '90-119', '120-149', 'bad_debt', 'paid_off', 'no_debt']
+    expanded.columns = ['id', '0-29', '30-59', '60-89', '90-119', '120-149', 'paid_off', 'no_debt']
 
     # find the max month of each id was present from full DF
     max_month = full.groupby('id')[['months_balance']].max().reset_index()
@@ -89,32 +93,25 @@ def get_reports_data(creditrecordcsv):
     
     # create a range for the maxium number of months (12) in the DF
     # use a for loop to put get the entire account's history to the current month by shifting status by -n
-    for n in range(1, 12):
+    for n in range(1, 6):
         full[f'{str(n)}month_ago'] = full.groupby('id')['status'].shift(-n)
     # Then merge the full df into the expanded DF on id and max month to get the full history for each id onto a single row
     expanded = expanded.merge(full, left_on=['id', 'max_month'], right_on=['id', 'months_balance'], how='left')
 
     # Rename the columns so that status = 12th month and it counts up rather than down
-    expanded.rename(columns={'status':'month_12',
-        '1month_ago':'month_11', 
-        '2month_ago': 'month_10', 
-        '3month_ago': 'month_09', 
-        '4month_ago': 'month_08',
-        '5month_ago': 'month_07',
-        '6month_ago':'month_06',
-        '7month_ago':'month_05', 
-        '8month_ago':'month_04',
-        '9month_ago':'month_03', 
-        '10month_ago':'month_02',
-        '11month_ago':'month_01'}, inplace=True)
+    expanded.rename(columns={'status':'month_06',
+       '1month_ago':'month_05', 
+       '2month_ago': 'month_04', 
+       '3month_ago': 'month_03', 
+       '4month_ago': 'month_02',
+       '5month_ago': 'month_01'}, inplace=True)
 
     # drop months_balance and max_month column and rearrage columns to make sense
-    expanded = expanded[['id', '0-29', '30-59', '60-89', '90-119', '120-149', 'bad_debt', 'paid_off', 
-                        'no_debt', 'month_01', 'month_02', 'month_03', 'month_04', 'month_05', 'month_06', 
-                        'month_07', 'month_08', 'month_09', 'month_10', 'month_11', 'month_12',]]
+    expanded = expanded[['id', '0-29', '30-59', '60-89', '90-119', '120-149', 'paid_off', 
+                        'no_debt', 'month_01', 'month_02', 'month_03', 'month_04', 'month_05', 'month_06']]
 
     # create the target varaible of default where 1 = has a default 0 = doesn't have a default
-    expanded['defaulted'] = (expanded['bad_debt'] > 0).astype(int)
+    expanded['defaulted'] = expanded['id'].isin(default_ids)
     # return the expanded DF
     return expanded
     
