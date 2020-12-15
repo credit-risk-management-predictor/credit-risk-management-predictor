@@ -28,10 +28,7 @@ def get_reports_data(creditrecordcsv):
     # fill all null values with 0 
     expanded.fillna(0, inplace=True)
     # rename the columns in a way that makes sense
-    expanded.columns = ['id', '0-29', '120-149', '30-59', '60-89', '90-119',
-        'bad_debt', 'no_debt', 'paid_off', 'months_active']
-    # Reorders the columns for clarity    
-    expanded = expanded[['id', '0-29', '30-59', '60-89', '90-119', '120-149', 'bad_debt', 'no_debt', 'paid_off', 'months_active']]
+    expanded.columns = ['id', '0-29', '30-59', '60-89', '90-119', '120-149', 'bad_debt', 'paid_off', 'no_debt', 'months_active']
 
     # copy the expanded dataframe to maintain data intregity (for exploring and future data prepping as needed)
     score = expanded.copy()
