@@ -219,8 +219,8 @@ def encode_dummies(apps):
     ##apps_encoded.drop(columns=dummies_list, inplace=True)
     
     # Drop gender, age, and family status
-    dropped = ['code_gender', 'name_family_status', 'age']
-    apps_encoded.drop(columns=dropped, inplace=True)
+    #dropped = ['code_gender', 'name_family_status', 'age']
+    #apps_encoded.drop(columns=dropped, inplace=True)
 
     return apps_encoded   
 
