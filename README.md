@@ -39,27 +39,27 @@ This project will contain
 
 # Appendix
 
-## Team Members:
 
+## Team Members:
 * **Adam Gomez**
-  - :mailbox: - adam.daniel.gomez.787@gmail.com
-  - :smile_cat: - https://github.com/adam-gomez 
-  - :link: - https://www.linkedin.com/in/adam-gomez/
+  - <img src="https://www.flaticon.com/svg/static/icons/svg/3143/3143198.svg" alt="LinkedIn" width="32" height="32"> - adam.daniel.gomez.787@gmail.com
+  - <img src="https://www.flaticon.com/svg/static/icons/svg/25/25231.svg" alt="LinkedIn" width="32" height="32"> - https://github.com/adam-gomez 
+  - <img src="https://www.flaticon.com/svg/static/icons/svg/174/174857.svg" alt="LinkedIn" width="32" height="32"> - https://www.linkedin.com/in/adam-gomez/
 
 * **Matt Knight**
-  - :mailbox: - mattknight.sa@gmail.com
-  - :smile_cat: - https://github.com/matt-c-knight
-  - :link: - https://www.linkedin.com/in/matt-knight-9ba764200/
+  - <img src="https://www.flaticon.com/svg/static/icons/svg/3143/3143198.svg" alt="LinkedIn" width="32" height="32"> - mattknight.sa@gmail.com
+  - <img src="https://www.flaticon.com/svg/static/icons/svg/25/25231.svg" alt="LinkedIn" width="32" height="32"> - https://github.com/matt-c-knight
+  - <img src="https://www.flaticon.com/svg/static/icons/svg/174/174857.svg" alt="LinkedIn" width="32" height="32"> - https://www.linkedin.com/in/matt-knight-9ba764200/
 
 * **Bibek Mainali**
-  - :mailbox: - bibek.mainali20@gmail.com
-  - :smile_cat: - https://github.com/MainaliB
-  - <img src="https://www.flaticon.com/svg/static/icons/svg/174/174857.svg" alt="LinkedIn" width="50" height="50"> - https://www.linkedin.com/in/bibek-mainali/
+  - <img src="https://www.flaticon.com/svg/static/icons/svg/3143/3143198.svg" alt="LinkedIn" width="32" height="32"> - bibek.mainali20@gmail.com
+  - <img src="https://www.flaticon.com/svg/static/icons/svg/25/25231.svg" alt="LinkedIn" width="32" height="32"> - https://github.com/MainaliB
+  - <img src="https://www.flaticon.com/svg/static/icons/svg/174/174857.svg" alt="LinkedIn" width="32" height="32"> - https://www.linkedin.com/in/bibek-mainali/
 
 * **Anthony Rivera Straine** 
-  - :mailbox: - anthony.straine@gmail.com
-  - :smile_cat: - https://github.com/datastraine
-  - :link: -  https://www.linkedin.com/in/anthony-straine/
+  - <img src="https://www.flaticon.com/svg/static/icons/svg/3143/3143198.svg" alt="LinkedIn" width="32" height="32"> - anthony.straine@gmail.com
+  - <img src="https://www.flaticon.com/svg/static/icons/svg/25/25231.svg" alt="LinkedIn" width="32" height="32"> - https://github.com/datastraine
+  - <img src="https://www.flaticon.com/svg/static/icons/svg/174/174857.svg" alt="LinkedIn" width="32" height="32"> -  https://www.linkedin.com/in/anthony-straine/
 
 
 
