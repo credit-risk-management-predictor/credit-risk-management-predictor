@@ -320,5 +320,5 @@ def wrangle_credit():
     # add the score to the apps data
     final_df = apps.merge(expanded, on='id', how='inner')
     # split the apps_cred data (apps + credit report) into train, validate, and test sets and return the results
-    train, validate, test = split_data(final_df)
+    train, validate, test = split_stratify_data(final_df, 'defaulted')
     return train, validate, test
