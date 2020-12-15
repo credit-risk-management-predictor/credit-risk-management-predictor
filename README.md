@@ -54,7 +54,7 @@ This project will contain
 * **Bibek Mainali**
   - :mailbox: - bibek.mainali20@gmail.com
   - :smile_cat: - https://github.com/MainaliB
-  - :link: - https://www.linkedin.com/in/bibek-mainali/
+  - <img src="[url](https://www.flaticon.com/svg/static/icons/svg/174/174857.svg)" alt="LinkedIn" width="50" height="50"> - https://www.linkedin.com/in/bibek-mainali/
 
 * **Anthony Rivera Straine** 
   - :mailbox: - anthony.straine@gmail.com
