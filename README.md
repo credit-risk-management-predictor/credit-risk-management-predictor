@@ -41,30 +41,19 @@ This project will contain
 
 
 ## Team Members:
-* **Adam Gomez**
-  - <img src="https://www.flaticon.com/svg/static/icons/svg/3143/3143198.svg" alt="LinkedIn" width="32" height="32"> - adam.daniel.gomez.787@gmail.com
-  - <img src="https://www.flaticon.com/svg/static/icons/svg/25/25231.svg" alt="LinkedIn" width="32" height="32"> - https://github.com/adam-gomez 
-  - <img src="https://www.flaticon.com/svg/static/icons/svg/174/174857.svg" alt="LinkedIn" width="32" height="32"> - https://www.linkedin.com/in/adam-gomez/
+### Adam Gomez
+<pre><a href="adam.daniel.gomez.787@gmail.com"><img src="https://www.flaticon.com/svg/static/icons/svg/3143/3143198.svg" alt="EMAIL" width="32" height="32"></a>    <a href="https://github.com/adam-gomez"><img src="https://www.flaticon.com/svg/static/icons/svg/25/25231.svg" alt="GitHub" width="32" height="32"></a>    <a href="https://www.linkedin.com/in/adam-gomez/"><img src="https://www.flaticon.com/svg/static/icons/svg/174/174857.svg" alt="LinkedIn" width="32" height="32"></pre>
 
-* **Matt Knight**
-  - <img src="https://www.flaticon.com/svg/static/icons/svg/3143/3143198.svg" alt="LinkedIn" width="32" height="32"> - mattknight.sa@gmail.com
-  - <img src="https://www.flaticon.com/svg/static/icons/svg/25/25231.svg" alt="LinkedIn" width="32" height="32"> - https://github.com/matt-c-knight
-  - <img src="https://www.flaticon.com/svg/static/icons/svg/174/174857.svg" alt="LinkedIn" width="32" height="32"> - https://www.linkedin.com/in/matt-knight-9ba764200/
+### Matt Knight
+<pre><a href="mattknight.sa@gmail.com"><img src="https://www.flaticon.com/svg/static/icons/svg/3143/3143198.svg" alt="EMAIL" width="32" height="32"></a>    <a href="https://github.com/matt-c-knight"><img src="https://www.flaticon.com/svg/static/icons/svg/25/25231.svg" alt="GitHub" width="32" height="32"></a>    <a href="https://www.linkedin.com/in/matt-knight-9ba764200/"><img src="https://www.flaticon.com/svg/static/icons/svg/174/174857.svg" alt="LinkedIn" width="32" height="32"></a></pre>
 
-* **Bibek Mainali**
-  - <img src="https://www.flaticon.com/svg/static/icons/svg/3143/3143198.svg" alt="LinkedIn" width="32" height="32"> - bibek.mainali20@gmail.com
-  - <img src="https://www.flaticon.com/svg/static/icons/svg/25/25231.svg" alt="LinkedIn" width="32" height="32"> - https://github.com/MainaliB
-  - <img src="https://www.flaticon.com/svg/static/icons/svg/174/174857.svg" alt="LinkedIn" width="32" height="32"> - https://www.linkedin.com/in/bibek-mainali/
+## Bibek Mainali
+<pre><a href="mailto:bibek.mainali20@gmail.com"><img src="https://www.flaticon.com/svg/static/icons/svg/3143/3143198.svg" alt="LinkedIn" width="32" height="32"></a>    <a href="https://github.com/MainaliB"><img src="https://www.flaticon.com/svg/static/icons/svg/25/25231.svg" alt="GitHub" width="32" height="32"></a>    <a href="https://www.linkedin.com/in/bibek-mainali/"><img src="https://www.flaticon.com/svg/static/icons/svg/174/174857.svg" alt="LinkedIn" width="32" height="32"></a></pre>
 
-* **Anthony Rivera Straine** 
-  - <img src="https://www.flaticon.com/svg/static/icons/svg/3143/3143198.svg" alt="LinkedIn" width="32" height="32"> - anthony.straine@gmail.com
-  - <img src="https://www.flaticon.com/svg/static/icons/svg/25/25231.svg" alt="LinkedIn" width="32" height="32"> - https://github.com/datastraine
-  - <img src="https://www.flaticon.com/svg/static/icons/svg/174/174857.svg" alt="LinkedIn" width="32" height="32"> -  https://www.linkedin.com/in/anthony-straine/
-
-
+## Anthony Rivera Straine
+<a href="mailto:anthony.straine@gmail.com"><img src="https://www.flaticon.com/svg/static/icons/svg/3143/3143198.svg" alt="LinkedIn" width="32" height="32"></a>    <a href="https://github.com/datastraine"><img src="https://www.flaticon.com/svg/static/icons/svg/25/25231.svg" alt="LinkedIn" width="32" height="32"></a>    <a href=" https://www.linkedin.com/in/anthony-straine/"><img src="https://www.flaticon.com/svg/static/icons/svg/174/174857.svg" alt="LinkedIn" width="32" height="32"></a>
 
 ## Data Dictionary
-
 | Name | Description |
 |---|---|
 | id  | Unique identifier for a credit account  |
