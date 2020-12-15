@@ -8,62 +8,116 @@ import math
 
 def get_reports_data(creditrecordcsv):
     '''
-    The function takes in the credit_record.csv and creates a data frame for:
-    * expanded - for each account id find out the number of times each status occured throughout the history of the account
-    * score - creates a scoring system and returns the Expanded DF with the aggergated score, a score for months, and the number of times each status occured by serverity and . The higher the score the more risk
-    * full_history - for each account gives the full account's history starting at the most recent month of account going backwards 
-    i.e. if an account has been active for 3 months the status of the account will the most recent month's status while 2 months ago will be the first month of the account's existence
+    The function takes in the credit_record.csv and creates a DF that:
+    * Extracts IDs that have defaulted and have 11 months of history before defaulting
+    * Extracts IDs that have not defaulted and have at least 12 months of history 
+    * For defaulted IDs pulls the 11 months of data before defaulting
+    * For not_defaulted IDs pull the most recent 12 months of data
+    * Finds the counts of each status type during the 12months of data present for both deafult and not_defaulted ids
+    Note - Each row is single ID and has the 12 month's of history as noted above
     '''
+    
+    # Read in the DF
     report = pd.read_csv(creditrecordcsv)
-    # number of months of active credit account for each ID 
-    months = report.groupby('ID').count().reset_index()
-    # pull only the columns we care about
-    months = months[['ID', 'MONTHS_BALANCE']]
-    # rename the columns
-    months.columns = ['ID', 'MONTHS_ACTIVE']
-    # Number of times each ID had each status
-    expanded = report.groupby(['ID', 'STATUS']).size().unstack().reset_index()
-    # Merge the expanded data frame with the months data frame
-    expanded = expanded.merge(months, how='left', on='ID')
+    # Convert the columns to lower case
+    report.columns = report.columns.str.lower()
+    
+    # create a DF that pulls in all the default IDs and the month they defaulted
+    default = report[report['status']=='5'][['months_balance', 'id']].groupby('id').min().reset_index()
+    default.columns = ['id', 'first_deafult_month']
+
+    # create a DF that has all the ids and their minimum month of existence
+    min_month = report[['months_balance', 'id']].groupby('id').min().reset_index()
+    min_month.columns = ['id', 'first_month']
+    
+    # merge the default DF with the min_month DF
+    default = default.merge(min_month, on='id', how='left')
+    # find the number of months that existed in the data before the first default
+    default['months_before_default'] = abs(default['first_month']) - abs(default['first_deafult_month'])
+    # pull out all default ids to drop from the reports DF
+    ids_to_drop = list(default.id.unique())
+    # reassign the default DF to only those accounts that had 12 or more months of info before a default
+    default = default[default['months_before_default'] >= 12]
+    # merge the default DF onto the reports DF to get everything into a single DF
+    default_report = report.merge(default, on='id', how='left')
+
+    # create a new DF that only contains the 12 months of data for the ids that had defaults
+    default_data =(
+        default_report[(default_report['months_balance'] >= default_report['first_deafult_month'] - 11) 
+            & (default_report['months_balance'] <= default_report['first_deafult_month'])]
+    )
+    # then drop the columns that aren't needed
+    default_data = default_data[['id', 'months_balance', 'status']]
+
+    # create the not_default DF from the reports DF by dropping any id that had a default
+    not_default = report[~report['id'].isin(ids_to_drop)]
+    # from the not_default, find the max month and min month an id existed.
+    not_default_data = not_default.groupby('id')['months_balance'].agg(['max', 'count']).reset_index()
+    # find the number of months total an id was present
+    not_default_data = not_default_data[not_default_data['count']>=12]
+    # Pull out the ids_to_keep to drop from the report DF 
+    ids_to_keep = list(not_default_data['id'].unique())
+    # drop the ids that don't have at least 12 months of data
+    not_default = not_default[not_default['id'].isin(ids_to_keep)]
+    # merge the not_default DF with not_default_data to get everything onto one DF
+    not_default = not_default.merge(not_default_data, on='id', how='left')
+    # reassign not_default to only data only present for the last 12 months of an account's existence 
+    not_default = (not_default[(not_default['months_balance']<=not_default['max']) 
+                            & (not_default['months_balance']>=not_default['max']-11)])
+    # drop the columns used for calculations
+    not_default= not_default[['id', 'months_balance', 'status']]
+
+    # concat the not_default  and default_data frames together to form a single DF
+    full=pd.concat([not_default, default_data])
+    # reset the index and drop the previous index
+    full = full.reset_index(drop=True)
+    # create target variable of defaulted
+    
+    # expand the full DF to make it so that each row is a single id
+    expanded = full.groupby(['id', 'status']).size().unstack().reset_index()
     # fill all null values with 0 
     expanded.fillna(0, inplace=True)
     # rename the columns in a way that makes sense
-    expanded.columns = ['id', '0-29', '30-59', '60-89', '90-119', '120-149', 'bad_debt', 'paid_off', 'no_debt', 'months_active']
+    expanded.columns = ['id', '0-29', '30-59', '60-89', '90-119', '120-149', 'bad_debt', 'paid_off', 'no_debt']
 
-    # copy the expanded dataframe to maintain data intregity (for exploring and future data prepping as needed)
-    score = expanded.copy()
-    # multiply each lateness by n where n is the cronological order of the lateness i.e. being 30-59days is 2 and '120-149' is 5
-    # for paid off multiple by -2
-    score['30-59'] = score['30-59'] * 2
-    score['60-89'] = score['60-89'] * 3
-    score['90-119'] =  score['90-119'] * 4
-    score['120-149'] = score['120-149'] * 5
-    score['bad_debt'] = score['bad_debt'] * 6
-    score['paid_off'] = score['paid_off'] * -2
-    # convert the id to string
-    score['id'] = score['id'].astype(str)
-    # Creates a score for months active
-    score['time_score'] = np.where(score['months_active'] < 18, 0, np.where(score['months_active'] < 47, -10, -20))
-    # sum the values on the row level
-    score['score'] = score.sum(axis=1)
- 
-    # create a range for the maxium number of months (60) in the data frame
-    # use a for loop to put get the entire account's history to the current month by shifting status by n
-    for n in range(1, 61):
-        report.columns = report.columns.str.lower()
-        report[f'{str(n)}month_ago'] = report.groupby('id')['status'].shift(n)
-    # convert the months_balance column to positive number    
-    report['months_balance'] = report['months_balance']*-1
-    # get the max row for each id
-    full_history = report.groupby('id')[['months_balance']].max().reset_index()
-    # merge the full_history df with the report df (that has current history) so that each id only has 1 row
-    full_history = full_history.merge(report, how='left', on=['months_balance', 'id'])
-    # rename months_balance column to account_months for age
-    full_history.rename(columns={"months_balance": "account_months"}, inplace=True)
+    # find the max month of each id was present from full DF
+    max_month = full.groupby('id')[['months_balance']].max().reset_index()
+    max_month.columns=['id','max_month']
+    max_month
+    #merge the max month to the expanded DF. This will be used to get the full history for each id onto a single row
+    expanded = expanded.merge(max_month, on='id', how='left')
     
-    # return expanded, score, and full history data frames
-    return expanded, score, full_history    
+    # create a range for the maxium number of months (12) in the DF
+    # use a for loop to put get the entire account's history to the current month by shifting status by -n
+    for n in range(1, 12):
+        full[f'{str(n)}month_ago'] = full.groupby('id')['status'].shift(-n)
+    # Then merge the full df into the expanded DF on id and max month to get the full history for each id onto a single row
+    expanded = expanded.merge(full, left_on=['id', 'max_month'], right_on=['id', 'months_balance'], how='left')
 
+    # Rename the columns so that status = 12th month and it counts up rather than down
+    expanded.rename(columns={'status':'month_12',
+        '1month_ago':'month_11', 
+        '2month_ago': 'month_10', 
+        '3month_ago': 'month_09', 
+        '4month_ago': 'month_08',
+        '5month_ago': 'month_07',
+        '6month_ago':'month_06',
+        '7month_ago':'month_05', 
+        '8month_ago':'month_04',
+        '9month_ago':'month_03', 
+        '10month_ago':'month_02',
+        '11month_ago':'month_01'}, inplace=True)
+
+    # drop months_balance and max_month column and rearrage columns to make sense
+    expanded = expanded[['id', '0-29', '30-59', '60-89', '90-119', '120-149', 'bad_debt', 'paid_off', 
+                        'no_debt', 'month_01', 'month_02', 'month_03', 'month_04', 'month_05', 'month_06', 
+                        'month_07', 'month_08', 'month_09', 'month_10', 'month_11', 'month_12',]]
+
+    # create the target varaible of default where 1 = has a default 0 = doesn't have a default
+    expanded['defaulted'] = (expanded['bad_debt'] > 0).astype(int)
+    # return the expanded DF
+    return expanded
+    
 def pensioner_years_worked(row):
     '''
     This function takes in a row of a dataframe and checks if the row belongs to a pensioner that is permanently retired (days_employed = -365243)
@@ -149,51 +203,7 @@ def get_application_data(applicationrecordcsv):
     # If days employed is a stand in value (-365243), convert that to a number of days equal to the estimated number of years worked
     apps['days_employed'] = apps.apply(lambda row: pensioner_days_employed(row), axis = 1)
 
-    # Converts id to object type
-    apps['id'] = apps['id'].astype(str)
-
     return apps
-    
-def add_score_target(apps, score):
-    '''
-    This takes in the apps and score dataframes and returns apps_cred, which contains all applications with credit records with their score attached
-    and apps_none, which are all applications that have no credit record
-    '''
-    # Reduces the score dataframe to only the id and score columns
-    score = score[['id', 'score']]
-    
-    # Merges on the left, leaving many records with NaN for score
-    apps = apps.merge(score, how='left', on = 'id')
-    
-    # Creates a dataframe where the score is not null (these applications have a credit record)
-    apps_cred = apps[apps.score.notnull()]
-    apps_cred.reset_index(drop=True, inplace=True)
-
-    # Creates a dataframe where the score is null (these applications do not have a credit record)
-    apps_none = apps[apps.score.isna()]
-    apps_none = apps_none.drop(columns='score')
-    apps_none.reset_index(drop=True, inplace=True)
-    
-    return apps_cred, apps_none
-
-def add_apps_dummies(apps):
-    '''
-    This returns the apps dataframe with dummy variables
-    '''
-    # Create list of categorical variables to make dummies of
-    dummies_list = ['name_income_type', 'name_education_type', 'name_family_status', 'name_housing_type', 'occupation_type'] 
-    
-    # Create dummies dataframe
-    dummies = pd.get_dummies(apps[dummies_list])
-    
-    # Convert dummy column headers to snake case style
-    dummies.columns = dummies.columns.str.lower()
-    dummies.columns = dummies.columns.str.replace(" ", "_")
-    
-    # Concate with original dataframe
-    apps_dummies = pd.concat([apps, dummies], axis=1)
-    
-    return apps_dummies
 
 def encode_dummies(apps):
     '''
@@ -212,13 +222,6 @@ def encode_dummies(apps):
     # Concate with original dataframe
     apps_encoded = pd.concat([apps, dummies], axis=1)
     
-    # Drop original columns
-    ##apps_encoded.drop(columns=dummies_list, inplace=True)
-    
-    # Drop gender, age, and family status
-    #dropped = ['code_gender', 'name_family_status', 'age']
-    #apps_encoded.drop(columns=dropped, inplace=True)
-
     return apps_encoded   
 
 def split_data(df, pct=0.10):
@@ -308,14 +311,14 @@ def wrangle_credit():
     This function utlizes the above defined functions to create the train, validate, and test data sets for analysis. 
     Note - The create_scaled_x_y function will be used after EDA to avoid confusion
     '''
-    # get the credit report data into a data frame
-    expanded, score, full_history = get_reports_data('credit_record.csv')
-    # get the apps data into a data frame
+    # get the credit report data into a DF
+    expanded = get_reports_data('credit_record.csv')
+    # get the apps data into a DF
     apps = get_application_data('application_record.csv')
     # create the dummy varaibles for the apps data
     apps = encode_dummies(apps)
     # add the score to the apps data
-    apps_cred, apps_none = add_score_target(apps, score)
+    final_df = apps.merge(expanded, on='id', how='inner')
     # split the apps_cred data (apps + credit report) into train, validate, and test sets and return the results
-    train, validate, test  = split_data(apps_cred)
+    train, validate, test = split_stratify_data(final_df, 'defaulted')
     return train, validate, test
