@@ -51,7 +51,7 @@ This project will contain
 <pre><a href="mailto:bibek.mainali20@gmail.com"><img src="https://www.flaticon.com/svg/static/icons/svg/3143/3143198.svg" alt="LinkedIn" width="32" height="32"></a>    <a href="https://github.com/MainaliB"><img src="https://www.flaticon.com/svg/static/icons/svg/25/25231.svg" alt="GitHub" width="32" height="32"></a>    <a href="https://www.linkedin.com/in/bibek-mainali/"><img src="https://www.flaticon.com/svg/static/icons/svg/174/174857.svg" alt="LinkedIn" width="32" height="32"></a></pre>
 
 ## Anthony Rivera Straine
-<a href="mailto:anthony.straine@gmail.com"><img src="https://www.flaticon.com/svg/static/icons/svg/3143/3143198.svg" alt="LinkedIn" width="32" height="32"></a>    <a href="https://github.com/datastraine"><img src="https://www.flaticon.com/svg/static/icons/svg/25/25231.svg" alt="LinkedIn" width="32" height="32"></a>    <a href=" https://www.linkedin.com/in/anthony-straine/"><img src="https://www.flaticon.com/svg/static/icons/svg/174/174857.svg" alt="LinkedIn" width="32" height="32"></a>
+<pre><a href="mailto:anthony.straine@gmail.com"><img src="https://www.flaticon.com/svg/static/icons/svg/3143/3143198.svg" alt="LinkedIn" width="32" height="32"></a>    <a href="https://github.com/datastraine"><img src="https://www.flaticon.com/svg/static/icons/svg/25/25231.svg" alt="LinkedIn" width="32" height="32"></a>    <a href=" https://www.linkedin.com/in/anthony-straine/"><img src="https://www.flaticon.com/svg/static/icons/svg/174/174857.svg" alt="LinkedIn" width="32" height="32"></a></pre>
 
 ## Data Dictionary
 | Name | Description |
