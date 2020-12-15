@@ -128,7 +128,7 @@ def get_reports_data(creditrecordcsv):
     # Create score features
     expanded['total_score'] = expanded['month_01'] + expanded['month_02'] + expanded['month_03'] + expanded['month_04'] + expanded['month_05'] + expanded['month_06']
     expanded['odd_months_score'] = expanded['month_01'] + expanded['month_03'] + expanded['month_05']
-    expanded['last_half_score'] = expanded['month_02'] + expanded['month_04'] + expanded['month_06']
+    expanded['last_half_score'] = expanded['month_04'] + expanded['month_05'] + expanded['month_06']
     expanded['first_half_score'] = expanded['month_01'] + expanded['month_02'] + expanded['month_03']
     expanded['last_half_score'] = expanded['month_04'] + expanded['month_05'] + expanded['month_06']
     expanded['difference_score '] = expanded['last_half_score'] - expanded['first_half_score'] 
