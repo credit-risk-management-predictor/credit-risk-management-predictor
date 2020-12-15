@@ -138,7 +138,7 @@ def get_reports_data(creditrecordcsv):
     expanded['ending_score'] = expanded['month_05'] + expanded['month_06'] 
     expanded['spread_score'] = expanded['month_02'] + expanded['month_03'] + expanded['month_04'] + expanded['month_05']
     expanded['alpha_omgea_score'] = expanded['month_01'] + expanded['month_06']
-    expanded['beggining_ending_score'] = expanded['beggining_score'] + expanded['beggining_score']
+    expanded['begining_ending_score'] = expanded['begining_score'] + expanded['ending_score']
     
     # create the targbet varaible by only looking at ids that 
     expanded['defaulted'] = expanded['id'].isin(default_ids).astype(int)
