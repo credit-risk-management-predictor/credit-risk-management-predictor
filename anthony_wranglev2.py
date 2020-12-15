@@ -110,8 +110,38 @@ def get_reports_data(creditrecordcsv):
     expanded = expanded[['id', '0-29', '30-59', '60-89', '90-119', '120-149', 'paid_off', 
                         'no_debt', 'month_01', 'month_02', 'month_03', 'month_04', 'month_05', 'month_06']]
 
-    # create the target varaible of default where 1 = has a default 0 = doesn't have a default
-    expanded['defaulted'] = expanded['id'].isin(default_ids)
+    # create a months_exist DF to house the number of months an account was present (full history)
+    months_exist = report.groupby('id')[['months_balance']].count().reset_index()
+    months_exist.columns = ['id', 'months_exist']
+    # left join the months_exist DF onto the expanded DF
+    expanded = expanded.merge(months_exist, on='id', how='left')
+ 
+    # create a DF that contains Id and month_01 - month_06 and replace the values in the months columns with scores
+    replace_month = expanded[['id', 'month_01', 'month_02', 'month_03', 'month_04', 'month_05', 'month_06']].replace({'0':2, '1':3, '2':4, '3':5,
+                                                                                        '4':6, 'X':0, 'C':1})
+    # drop the months columns from the original DF
+    expanded.drop(['month_01', 'month_02',
+        'month_03', 'month_04', 'month_05', 'month_06'], axis=1, inplace=True)
+    # Merge the original DF with the replace_month DF
+    expanded = expanded.merge(replace_month, on='id', how='left')
+    
+    # Create score features
+    expanded['total_score'] = expanded['month_01'] + expanded['month_02'] + expanded['month_03'] + expanded['month_04'] + expanded['month_05'] + expanded['month_06']
+    expanded['odd_months_score'] = expanded['month_01'] + expanded['month_03'] + expanded['month_05']
+    expanded['last_half_score'] = expanded['month_02'] + expanded['month_04'] + expanded['month_06']
+    expanded['first_half_score'] = expanded['month_01'] + expanded['month_02'] + expanded['month_03']
+    expanded['last_half_score'] = expanded['month_04'] + expanded['month_05'] + expanded['month_06']
+    expanded['difference_score '] = expanded['last_half_score'] - expanded['first_half_score'] 
+    expanded['odds_evens_score'] = expanded['month_01'] + expanded['month_03'] + expanded['month_04'] + expanded['month_06']
+    expanded['beggining_score'] = expanded['month_01'] + expanded['month_02']
+    expanded['middle_score'] = expanded['month_03'] + expanded['month_04'] 
+    expanded['ending_score'] = expanded['month_05'] + expanded['month_06'] 
+    expanded['spread_score'] = expanded['month_02'] + expanded['month_03'] + expanded['month_04'] + expanded['month_05']
+    expanded['alpha_omgea_score'] = expanded['month_01'] + expanded['month_06']
+    expanded['beggining_ending_score'] = expanded['beggining_score'] + expanded['beggining_score']
+    
+    # create the targbet varaible by only looking at ids that 
+    expanded['defaulted'] = expanded['id'].isin(default_ids).astype(int)
     # return the expanded DF
     return expanded
     
