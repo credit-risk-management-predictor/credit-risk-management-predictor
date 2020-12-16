@@ -133,7 +133,7 @@ def get_reports_data(creditrecordcsv):
     expanded['last_half_score'] = expanded['month_04'] + expanded['month_05'] + expanded['month_06']
     expanded['difference_score'] = expanded['last_half_score'] - expanded['first_half_score'] 
     expanded['odds_evens_score'] = expanded['month_01'] + expanded['month_03'] + expanded['month_04'] + expanded['month_06']
-    expanded['beggining_score'] = expanded['month_01'] + expanded['month_02']
+    expanded['begining_score'] = expanded['month_01'] + expanded['month_02']
     expanded['middle_score'] = expanded['month_03'] + expanded['month_04'] 
     expanded['ending_score'] = expanded['month_05'] + expanded['month_06'] 
     expanded['spread_score'] = expanded['month_02'] + expanded['month_03'] + expanded['month_04'] + expanded['month_05']
