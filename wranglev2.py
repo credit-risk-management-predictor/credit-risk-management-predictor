@@ -335,9 +335,15 @@ def create_scaled_x_y(train, validate, test, target):
 
 def wrangle_credit():
     '''
-    This function utlizes the above defined functions to create the train, validate, and test data sets for analysis. 
+    This function does the following:
+    * uses get_reports_data function to process credit_reports.csv data into the expanded DF 
+    * uses get_application_data functionto process the application_record.csv into an apps DF
+    * uses encode_dummies function to create dummy variables from the categorical variables of the apps DF
+    * merges the apps and expanded DFs into a final_df on 'id'
+    * uses split_stratify_data on the final_df to create the train, validate, test data sets
+    * return train, validate, test data sets as DFs
     Note - The create_scaled_x_y function will be used after EDA to avoid confusion.
-    Note2 - Remember to drop columns not used as features such as age, gender, etc
+    Note 2 - Remember to drop columns not used as features such as age, gender, etc
     '''
     # get the credit report data into a DF
     expanded = get_reports_data('credit_record.csv')
