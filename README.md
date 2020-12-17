@@ -2,8 +2,7 @@
 ## Table of Contents
 - [Goal](#goal)
 - [Wrangle](#wrangle)
-  - [Acquire](#acquire)
-  - [Pre-processing](#pre-processing)
+- [Ethical Considerations](#ethical-considerations)
 - [Exploratory Data Analysis (EDA)](#exploratory-data-analysis-eda)
   - [Hypothesis Testing](#hypothesis-testing)
 - [Modeling](#modeling)
@@ -11,10 +10,18 @@
   - [Next Steps](#next-steps)
 - [Appendix](#appendix)
   - [Team Members:](#team-members)
+    - [Adam Gomez](#adam-gomez)
+    - [Matt Knight](#matt-knight)
+  - [Bibek Mainali](#bibek-mainali)
+  - [Anthony Rivera Straine](#anthony-rivera-straine)
   - [Data Dictionary](#data-dictionary)
 
 # Goal
-Chinese banks are very risk-averse, yet younger generations are more willing to take on debt at similar rates to other developed countries. What are the contributing factors to a credit card holder defaulting on debt? How can we know if an account will default 6 months into the future? That is what we aim to find out! We will accomplish this by looking for patterns in user's credit history and application data, with a watchful eye to ethical consideration.
+Chinese banks are very risk-averse, yet younger generations are more willing to take on debt at similar rates to other developed countries. What are the contributing factors to a credit card holder defaulting on debt? When will an account default 6 months into the future? That is what we aim to find out! We will accomplish this by looking for patterns in a user's credit history and application data, always with an eye to ethical consideration when dealing with demographic data, to predict if they will default 6 months in the future. 
+
+**Bottom Line Up Front (BLUF)**
+
+From all the work contained in this notebook we have determined that...
 
 This project will contain
 * A [Jupyter Notebook]() - needs link
@@ -22,14 +29,41 @@ This project will contain
 * A [data dictionary](#data-dictionary) (linked below) 
 
 # Wrangle
+All the prep/wrangle work is handled by the wrangle_credit function imported from the [wrangle-V2](https://github.com/credit-risk-management-predictor/credit-risk-management-predictor/blob/main/wranglev2.py) module. For an in-depth explanation of how the wrangle_credit function works please see the [How-To Notebook](https://github.com/credit-risk-management-predictor/credit-risk-management-predictor/blob/main/how_to.ipynb).
 
-## Acquire
-
-## Pre-processing
+# Ethical Considerations
+When dealing with something as consequential as credit card approvals, it is important to make sure you aren't training your model with data that has been biased against a demographic class due to historical discrimination as this can reinforce cultural biases. Besides, it's also bad for business. Knowing this, we will begin by determining if ***gender*** can be inferred from other information within the application data. If it can, then we should not use those features in our model.
 
 # Exploratory Data Analysis (EDA)
+In order to determine whether or not gender can be inferred from our data we have to conduct hypothesis tests. We will cross reference gender with the following features:
+
+> flag_own_car, flag_own_realty, cnt_children, and amt_income_total
+
+We accomplished this by running Two-Sample; Two-Tail T-tests and found that each had a significant statistically relationship with gender. However, while income and gender have a relationship, gender and income may suffer from a third variable problem.  Intuitively, this makes sense as income is also greatly dependent upon occupation. A T-test would show the macro relationship between gender and income, but would not be able to account for other confounding factors. For more details on the gender pay gap, see [The True Story of the Gender Pay Gap](https://freakonomics.com/podcast/the-true-story-of-the-gender-pay-gap-a-new-freakonomics-radio-podcast/) by [Feakonomics Podcast](www.freakonomics.com).
+
+
+To gather insights into our data we will split our visualizations into two types: continuous variables and categorical variables. Based on our previous testing with gender, we decided not to include `flag_own_car`, `flag_own_realty`, or `cnt_children` in our visualization as these were tightly correlated with gender. 
+
+**Continuous Variables Finding**
+* There is a clear difference between the distributions of defaulted and not defaulted account holders for each of the scoring variables and how many months an account existed in the data
+* Defaulted accounts skew toward the higher end of the of the scoring system, ergo they have more instances of late payments on the whole.
+* With difference score, the accounts that defaulted have more positive values which means that their scores are higher in months 4, 5, and 6 combined than 1, 2, and 3 combined. 
+* With difference score, accounts that did not default appear to have more consistent payments across the months as the majority accounts have a score of 0.
+
+
+**Categorical Variables Findings**
+- People with commercial associate type as income type make of 23% of the total pop however, they make 31% of the default pop
+- Income type categorized as student do not default at all
+- People with higher education make up 28% of the total applicant, however they make 31% of the total defaulting population
+- People with incomplete higher education make up 4% of the total applicant population, however, they make up 6% of the defaulted population.
+- People with Academic degree and lower secondary degree do not default at all and 
+- Those who stay with parents do not default on their debt
+- Those with house/apartment are more likely to default
+- Those with office apartment do not default on their debt
+
 
 ## Hypothesis Testing
+To test for statistical significance we need to run chi squared tests on our categorical variables and Two Sample; Two-Tail T-test on our continuous variables since our target variable, defaulted, is a categorical variable. From these test we failed to reject the null hypothesis on all our test involving categorical variables meaning that we could not prove statistical significance. On the other hand, we could did reject the null hypothesis on all our test involving our continuous variables and thus we can use them to build our models.
 
 # Modeling
 
