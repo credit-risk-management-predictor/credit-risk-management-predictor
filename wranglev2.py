@@ -5,6 +5,9 @@ import numpy as np
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 import math
+from statsmodels.stats.outliers_influence import variance_inflation_factor
+
+
 
 def get_reports_data(creditrecordcsv):
     '''
@@ -333,12 +336,22 @@ def create_scaled_x_y(train, validate, test, target):
     scaler, X_train_scaled, X_validate_scaled, X_test_scaled = standard_scaler(X_train, X_validate, X_test)
     return X_train_scaled, y_train, X_validate_scaled, y_validate, X_test_scaled, y_test
 
+def calc_vif(df):
+    '''
+    Accepts a data frame and calculates the VIF to esatbalish milticollinearity between variables. Use on X_train_scaled data
+    '''
+    # Calculating VIF
+    vif = pd.DataFrame()
+    vif["variables"] = df.columns
+    vif["VIF"] = [variance_inflation_factor(df.values, i) for i in range(df.shape[1])]
+    return(vif)
+
+
 def wrangle_credit():
     '''
     This function does the following:
     * uses get_reports_data function to process credit_reports.csv data into the expanded DF 
     * uses get_application_data functionto process the application_record.csv into an apps DF
-    * uses encode_dummies function to create dummy variables from the categorical variables of the apps DF
     * merges the apps and expanded DFs into a final_df on 'id'
     * uses split_stratify_data on the final_df to create the train, validate, test data sets
     * return train, validate, test data sets as DFs
@@ -349,8 +362,6 @@ def wrangle_credit():
     expanded = get_reports_data('credit_record.csv')
     # get the apps data into a DF
     apps = get_application_data('application_record.csv')
-    # create the dummy varaibles for the apps data
-    apps = encode_dummies(apps)
     # add the score to the apps data
     final_df = apps.merge(expanded, on='id', how='inner')
     # split the apps_cred data (apps + credit report) into train, validate, and test sets and return the results
