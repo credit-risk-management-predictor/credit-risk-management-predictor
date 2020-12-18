@@ -5,6 +5,7 @@
 - [Ethical Considerations](#ethical-considerations)
 - [Exploratory Data Analysis (EDA)](#exploratory-data-analysis-eda)
   - [Hypothesis Testing](#hypothesis-testing)
+- [Feature Selection](#feature-selection)
 - [Modeling](#modeling)
 - [Results & Conclusion](#results--conclusion)
   - [Next Steps](#next-steps)
@@ -12,8 +13,8 @@
   - [Team Members:](#team-members)
     - [Adam Gomez](#adam-gomez)
     - [Matt Knight](#matt-knight)
-  - [Bibek Mainali](#bibek-mainali)
-  - [Anthony Rivera Straine](#anthony-rivera-straine)
+    - [Bibek Mainali](#bibek-mainali)
+    - [Anthony Rivera Straine](#anthony-rivera-straine)
   - [Data Dictionary](#data-dictionary)
 
 # Goal
@@ -24,8 +25,8 @@ Chinese banks are very risk-averse, yet younger generations are more willing to 
 From all the work contained in this notebook we have determined that...
 
 This project will contain
-* A [Jupyter Notebook]() - needs link
-* A 5 minute [presentation] needs link 
+* A [Jupyter Notebook](https://github.com/credit-risk-management-predictor/credit-risk-management-predictor/blob/main/analysis_and_modeling.ipynb) 
+* A 5 minute [presentation] - needs link 
 * A [data dictionary](#data-dictionary) (linked below) 
 
 # Wrangle
@@ -65,14 +66,40 @@ To gather insights into our data we will split our visualizations into two types
 ## Hypothesis Testing
 To test for statistical significance we need to run chi squared tests on our categorical variables and Two Sample; Two-Tail T-test on our continuous variables since our target variable, defaulted, is a categorical variable. From these test we failed to reject the null hypothesis on all our test involving categorical variables meaning that we could not prove statistical significance. On the other hand, we could did reject the null hypothesis on all our test involving our continuous variables and thus we can use them to build our models.
 
+# Feature Selection
+In order to select our features we used variance inflation factor method to eliminate features that had too much multicollinearity. In other words, we only wanted to model features that were truly independent of one another. This left us with the following features to use in our model
+- amt_income_total
+- paid_off
+- no_debt
+- total_score
+
 # Modeling
+After scaling our training data we need to handle how imbalanced our training data is before modeling. We will handle through various methods.
+
+* Random Oversampling – Essentially randomly duplicates data from the minority class, in our case defaulted accounts
+* Random Undersampling – Chooses random data from the majority class, account that did not default, and removes them from the training data
+* Synthetic Minority Oversampling Technique (SMOTE) – Creates synthetic data from the minority class by by selecting examples that are close in the feature space, drawing a line between the examples in the feature space and drawing a new sample at a point along that line.
+* Overunder sampling SMOTE : combines the above techniques to produce a training data set. 
+
+
+Once we have our sampling objects created, we'll use them to fit our training data and then use the following modeling techniques to make predictions on the [training data](#Train-Modeling):
+
+* Logistic Regression
+* Stochastic Gradient Descent Classifer
+* Ridge Classifer
+
+
+We will then use the top 5 performing models on our validate data set to test for overfitting. Finally, we will use the top model from our validation against the test and report our results].
 
 # Results & Conclusion
+After running through all our models we found that logistic regression using the combination of over and under sampling worked the best as it had the highest accuracy and recall combination of all the model we ran on validate. We now need to run the this model on our test set.
+
+On test, this model performed with a 78% recall rate on defaulted accounts, a 72% recall rate on non-defaulted accounts, and and over all accuracy rating of 72%. It should be noted that all of our models performed really badly in regards to precision for defaulted accounts. The reason for this is that the data is vastly overbalanced toward non-defaulted accounts. This makes sense as people in China are considered super savers and are debt adverse. It was also for this reason and the fact that we want to weigh accurate predictions of accounts who will default that we choose to use Recall.
+
 
 ## Next Steps
 
 # Appendix
-
 
 ## Team Members:
 ### Adam Gomez
@@ -81,10 +108,10 @@ To test for statistical significance we need to run chi squared tests on our cat
 ### Matt Knight
 <pre><a href="mattknight.sa@gmail.com"><img src="https://www.flaticon.com/svg/static/icons/svg/3143/3143198.svg" alt="EMAIL" width="32" height="32"></a>    <a href="https://github.com/matt-c-knight"><img src="https://www.flaticon.com/svg/static/icons/svg/25/25231.svg" alt="GitHub" width="32" height="32"></a>    <a href="https://www.linkedin.com/in/matt-knight-9ba764200/"><img src="https://www.flaticon.com/svg/static/icons/svg/174/174857.svg" alt="LinkedIn" width="32" height="32"></a></pre>
 
-## Bibek Mainali
+### Bibek Mainali
 <pre><a href="mailto:bibek.mainali20@gmail.com"><img src="https://www.flaticon.com/svg/static/icons/svg/3143/3143198.svg" alt="LinkedIn" width="32" height="32"></a>    <a href="https://github.com/MainaliB"><img src="https://www.flaticon.com/svg/static/icons/svg/25/25231.svg" alt="GitHub" width="32" height="32"></a>    <a href="https://www.linkedin.com/in/bibek-mainali/"><img src="https://www.flaticon.com/svg/static/icons/svg/174/174857.svg" alt="LinkedIn" width="32" height="32"></a></pre>
 
-## Anthony Rivera Straine
+### Anthony Rivera Straine
 <pre><a href="mailto:anthony.straine@gmail.com"><img src="https://www.flaticon.com/svg/static/icons/svg/3143/3143198.svg" alt="LinkedIn" width="32" height="32"></a>    <a href="https://github.com/datastraine"><img src="https://www.flaticon.com/svg/static/icons/svg/25/25231.svg" alt="LinkedIn" width="32" height="32"></a>    <a href=" https://www.linkedin.com/in/anthony-straine/"><img src="https://www.flaticon.com/svg/static/icons/svg/174/174857.svg" alt="LinkedIn" width="32" height="32"></a></pre>
 
 ## Data Dictionary
@@ -135,43 +162,3 @@ To test for statistical significance we need to run chi squared tests on our cat
 | alpha_omega_score  | The total score for months 1 and 6|
 | beginning_ending_score  | The total score for months 1,2,5, and 6|
 | defaulted | Whether or not the account defaulted; 1 for yes and 2 for no|
-
-The following variables are dummy variables created for modeling. For each variable, 1 is yes/true and 0 is no/false
-
-| List of Dummy Variables |
-|---|
-| name_income_type_commercial_associate  |
-| name_income_type_pensioner  |
-| name_income_type_state_servant  |
-| name_income_type_student  |
-| name_income_type_working  |
-| name_education_type_academic_degree  |
-| name_education_type_higher_education  |
-| name_education_type_incomplete_higher  |
-| name_education_type_lower_secondary  |
-| name_education_type_secondary_/_secondary_special  |
-| name_housing_type_co-op_apartment  |
-| name_housing_type_house_/_apartment  |
-| name_housing_type_municipal_apartment  |
-| name_housing_type_office_apartment  |
-| name_housing_type_rented_apartment  |
-| name_housing_type_with_parents  |
-| occupation_type_accountants |
-| occupation_type_cleaning_staff  |
-| occupation_type_cooking_staff  |
-| occupation_type_core_staff  |
-| occupation_type_drivers  |
-| occupation_type_hr_staff  |
-| occupation_type_high_skill_tech_staff  |
-| occupation_type_it_staff  |
-| occupation_type_laborers  |
-| occupation_type_low-skill_laborers  |
-| occupation_type_managers  |
-| occupation_type_medicine_staff  |
-| occupation_type_other  |
-| occupation_type_private_service_staff  |
-| occupation_type_realty_agents  |
-| occupation_type_sales_staff  |
-| occupation_type_secretaries  |
-| occupation_type_security_staff |  
-| occupation_type_waiters/barmen_staff  |
