@@ -10,6 +10,7 @@
 - [Results & Conclusion](#results--conclusion)
   - [Next Steps](#next-steps)
 - [Appendix](#appendix)
+  - [Research](#research)
   - [Team Members:](#team-members)
     - [Adam Gomez](#adam-gomez)
     - [Matt Knight](#matt-knight)
@@ -99,11 +100,21 @@ On test, this model performed with a 78% recall rate on defaulted accounts, a 72
 
 
 ## Next Steps
+We would like to obtain more information in order to determine a customer’s profitability such as the amount of balance a customer carried and their interest rate. This would allow us to more accurately determined a user's risk score and improve the model's ability to hone in on which users would default. We will also use Recursive Feature Elimination to determine which features are useful for modeling and see how that model compares to our current model. 
 
 # Appendix
 
+## Research
+
+* [China Bank Card: No of Issued Credit Card](https://www.ceicdata.com/en/china/bank-card-statistics/bank-card-no-of-issued-credit-card),  Ceic Data
+* [COVID-19 and China’s Household Debt Dilemma](https://rhg.com/research/china-household-debt/#:~:text=China's%20credit%20card%20debt%20now,trillion%20yuan%20(%242.5%20trillion)) by Logan Wright and Allen Feng
+May 12, 2020, Rhodium Group
+* [Despite Rapid Digitisation of Payments in China, Credit Card Usage Will Reach New Heights by 2020](https://www.theasianbanker.com/updates-and-articles/despite-rapid-digitisation-of-payments-in-china,-credit-card-usage-will-reach-new-heights-by-2020) The Asian Banker, February 28, 2019
+* [Will China's Credit Card Boom Follow The Well-Worn Path to Bust?](https://www.spglobal.com/en/research-insights/articles/will-china-s-credit-card-boom-follow-the-well-worn-path-to-bust) S&P GLOBAL RATINGS, 4 Jul, 2019
+
 ## Team Members:
 ### Adam Gomez
+<img src=https://drive.google.com/file/d/1ci84cNRGOwql3rpIDEz59XBNIV6zBgap/view?usp=sharing>
 <pre><a href="adam.daniel.gomez.787@gmail.com"><img src="https://www.flaticon.com/svg/static/icons/svg/3143/3143198.svg" alt="EMAIL" width="32" height="32"></a>    <a href="https://github.com/adam-gomez"><img src="https://www.flaticon.com/svg/static/icons/svg/25/25231.svg" alt="GitHub" width="32" height="32"></a>    <a href="https://www.linkedin.com/in/adam-gomez/"><img src="https://www.flaticon.com/svg/static/icons/svg/174/174857.svg" alt="LinkedIn" width="32" height="32"></pre>
 
 ### Matt Knight
