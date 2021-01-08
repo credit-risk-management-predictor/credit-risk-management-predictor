@@ -26,11 +26,12 @@ From all the work contained in this notebook we have determined that...
 
 This project will contain
 * A [Jupyter Notebook](https://github.com/credit-risk-management-predictor/credit-risk-management-predictor/blob/main/analysis_and_modeling.ipynb) 
-* A 5 minute [presentation] - needs link 
+* A [slide deck](https://www.canva.com/design/DAEQaR_b1MA/FKCuserTtnHMcS3sEfH7dg/view?utm_content=DAEQaR_b1MA&utm_campaign=designshare&utm_medium=link&utm_source=sharebutton)
+* A 10 minute [presentation]() - needs link 
 * A [data dictionary](#data-dictionary) (linked below) 
 
 # Wrangle
-All the prep/wrangle work is handled by the wrangle_credit function imported from the [wrangle-V2](https://github.com/credit-risk-management-predictor/credit-risk-management-predictor/blob/main/wranglev2.py) module. For an in-depth explanation of how the wrangle_credit function works please see the [How-To Notebook](https://github.com/credit-risk-management-predictor/credit-risk-management-predictor/blob/main/how_to.ipynb).
+All the prep/wrangle work is handled by the wrangle_credit function imported from the [wrangle](https://github.com/credit-risk-management-predictor/credit-risk-management-predictor/blob/main/wrangle.py) module. For an in-depth explanation of how the wrangle_credit function works please see the [How-To Notebook](https://github.com/credit-risk-management-predictor/credit-risk-management-predictor/blob/main/how_to.ipynb).
 
 # Ethical Considerations
 When dealing with something as consequential as credit card approvals, it is important to make sure you aren't training your model with data that has been biased against a demographic class due to historical discrimination as this can reinforce cultural biases. Besides, it's also bad for business. Knowing this, we will begin by determining if ***gender*** can be inferred from other information within the application data. If it can, then we should not use those features in our model.
@@ -85,8 +86,8 @@ After scaling our training data we need to handle how imbalanced our training da
 Once we have our sampling objects created, we'll use them to fit our training data and then use the following modeling techniques to make predictions on the [training data](#Train-Modeling):
 
 * Logistic Regression
-* Stochastic Gradient Descent Classifer
-* Ridge Classifer
+* Stochastic Gradient Descent Classifier
+* Ridge Classifier
 
 
 We will then use the top 5 performing models on our validate data set to test for overfitting. Finally, we will use the top model from our validation against the test and report our results].
