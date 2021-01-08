@@ -96,11 +96,10 @@ We will then use the top 5 performing models on our validate data set to test fo
 # Results & Conclusion
 After running through all our models we found that logistic regression using the combination of over and under sampling worked the best as it had the highest accuracy and recall combination of all the model we ran on validate. We now need to run the this model on our test set.
 
-On test, this model performed with a 78% recall rate on defaulted accounts, a 72% recall rate on non-defaulted accounts, and and over all accuracy rating of 72%. It should be noted that all of our models performed really badly in regards to precision for defaulted accounts. The reason for this is that the data is vastly overbalanced toward non-defaulted accounts. This makes sense as people in China are considered super savers and are debt adverse. It was also for this reason and the fact that we want to weigh accurate predictions of accounts who will default that we choose to use Recall.
-
+On test, this model performed with a 78% recall rate on defaulted accounts and a 72% recall rate on non-defaulted accounts. It should be noted that all of our models performed really badly in regards to precision for defaulted accounts. The reason for this is that the data is vastly overbalanced toward non-defaulted accounts. This makes sense as people in China are considered super savers and are debt adverse. It was also for this reason and the fact that we want to weigh accurate predictions of accounts who will default that we choose to use Recall.
 
 ## Next Steps
-We would like to obtain more information in order to determine a customer’s profitability such as the amount of balance a customer carried and their interest rate. This would allow us to more accurately determined a user's risk score and improve the model's ability to hone in on which users would default. We will also use Recursive Feature Elimination to determine which features are useful for modeling and see how that model compares to our current model. 
+We would like to obtain more information in order to determine a customer’s profitability such as the balance a customer carried and their interest rate. This would allow us to more accurately determined a user's risk score and improve the model's ability to hone in on which users would default. Additionally, the demographic data provided not only presented ethical concerns, but they also proved to not have statistical significance with "default." We recommend that banks in China collect different data in their application process that more closely mirrors global industry standards. Finally, we will also use Recursive Feature Elimination to determine which features are useful for modeling, and see how a model built with those features compares to our current model. 
 
 # Appendix
 
@@ -114,7 +113,6 @@ May 12, 2020, Rhodium Group
 
 ## Team Members:
 ### Adam Gomez
-<img src="https://drive.google.com/file/d/1ci84cNRGOwql3rpIDEz59XBNIV6zBgap/view?usp=sharing" alt="EMAIL" width="32" height="32">
 <pre><a href="adam.daniel.gomez.787@gmail.com"><img src="https://www.flaticon.com/svg/static/icons/svg/3143/3143198.svg" alt="EMAIL" width="32" height="32"></a>    <a href="https://github.com/adam-gomez"><img src="https://www.flaticon.com/svg/static/icons/svg/25/25231.svg" alt="GitHub" width="32" height="32"></a>    <a href="https://www.linkedin.com/in/adam-gomez/"><img src="https://www.flaticon.com/svg/static/icons/svg/174/174857.svg" alt="LinkedIn" width="32" height="32"></pre>
 
 ### Matt Knight
