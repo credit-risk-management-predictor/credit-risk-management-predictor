@@ -114,7 +114,7 @@ May 12, 2020, Rhodium Group
 
 ## Team Members:
 ### Adam Gomez
-<img src=https://drive.google.com/file/d/1ci84cNRGOwql3rpIDEz59XBNIV6zBgap/view?usp=sharing>
+<img src="https://drive.google.com/file/d/1ci84cNRGOwql3rpIDEz59XBNIV6zBgap/view?usp=sharing">
 <pre><a href="adam.daniel.gomez.787@gmail.com"><img src="https://www.flaticon.com/svg/static/icons/svg/3143/3143198.svg" alt="EMAIL" width="32" height="32"></a>    <a href="https://github.com/adam-gomez"><img src="https://www.flaticon.com/svg/static/icons/svg/25/25231.svg" alt="GitHub" width="32" height="32"></a>    <a href="https://www.linkedin.com/in/adam-gomez/"><img src="https://www.flaticon.com/svg/static/icons/svg/174/174857.svg" alt="LinkedIn" width="32" height="32"></pre>
 
 ### Matt Knight
